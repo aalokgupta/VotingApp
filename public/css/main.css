@@ -1,0 +1,46 @@
+
+.container{
+  background-color: #02f7ba;
+  height: 500px;
+  line-height: 400px;
+  text-align: center;
+}
+.header{
+  background-color: #2777b5;
+  height: 200px;
+  line-height: 300px;
+  text-align: right;
+}
+.footer{
+  background-color: #2777b5;
+  height: 200px;
+  line-height: 200px;
+  text-align: right;
+}
+.votingApp{
+  font-size: 100px;
+  font-weight: normal;
+}
+.developerName{
+  font-size: 50px;
+  font-stretch: expanded;
+  text-align: right;
+  margin-right: 20px;
+  line-height: 200px;
+}
+.btn{
+  width: 150px;
+  height: 50px;
+  font-size: 25px;
+  font-style: normal;
+  font-weight: bold;
+  margin-right: 30px;
+  margin: 0 8px;
+	color: white;
+	background-color: #00BCD4;
+	display: inline-block;
+	border: 0;
+	border-radius: 3px;
+	padding: 10px 5px;
+	font-weight: 500;
+}
