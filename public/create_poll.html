@@ -1,0 +1,43 @@
+
+<html>
+
+<head>
+  <link href="/public/css/main.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+  <div class = "create-poll-header">
+    <div class = "user-name">Welcome <span id = "user_name"> Aalok </span> </div>
+    <div style = "padding-top: 30px">
+      <button class = "btn user-profile">Profile</button>
+      <button class = "btn user-logout">LogOut</button>
+    </div>
+  </div>
+  <div class = "create_poll_container">
+    <button class = "btn delete-poll">Delete Poll</button>
+    <button class = "btn view-poll">View Poll</button>
+    <div class = "div-poll">
+      <h2>What is your question ? Type here...</h2>
+      <div class = "div-poll-question">
+      <input type = "text"  class = "poll-text" id = "id-poll-text"></input>
+        <ol>
+        <li><input type = "text" class = "div-poll-option" id = "id-poll-option1"></li>
+        <li><input type = "text" class = "div-poll-option" id = "id-poll-option2"></li>
+        <!-- <li><input type = "text" style = "height: 30px"></li>
+        <li><input type = "text" style = "height: 30px"></li> -->
+       </ol>
+        <div>
+         <button class = "btn btn-add-option">Add Option</button>
+         <button class = "btn" id =  "btn-create-poll">Create Poll</button>
+       </div>
+    </div>
+  </div>
+  </div>
+  <div class = "footer">
+  </div>
+
+  <script type="text/javascript" src = "controllers/controller_create_poll.js"></script>
+  <script type="text/javascript" src="common/ajax-function.js"></script>
+
+  </body>
+</html>
