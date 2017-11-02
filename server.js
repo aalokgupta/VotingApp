@@ -4,12 +4,19 @@ var passport = require('passport');
 var Strategy = require('passport-twitter').Strategy;
 var session =  require('express-session');
 var User = require('./app/model/users.js');
+var bodyParser = require('body-parser');
 
 var ClickHandler = require(process.cwd() + '/app/controllers/clickHandler.server.js');
+var RequestHandler = require(process.cwd() + '/app/controllers/RequestHandler.server.js');
 var clickhandler = new ClickHandler();
 
 var app = express();
 require('dotenv').load();
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json()) // used for parsing the request header of post method without this req will be undefined)
+
+
 
 function isLoggedIn(req, res, next){
 		if(req.isAuthenticated()){
@@ -25,7 +32,7 @@ function isLoggedIn(req, res, next){
 	app.use('/public', express.static(process.cwd() + '/public'));
 	app.use('/common', express.static(process.cwd() + '/app/common'));
 
-mongoose.connect('mongodb://localhost:27017/votingapp');
+	mongoose.connect('mongodb://localhost:27017/votingapp');
 
 app.use(session({
   secret: 'voting app',
@@ -40,8 +47,44 @@ app.route('/').get(function(req, res){
   res.sendFile(process.cwd() + '/public/index.html');
 });
 
+app.route('/submit_poll').post(function(req, res){
+	console.log("post submit poll " +req.body.poll_string);
+	console.log("post submit poll " +req.body.option);
+  console.log("post submit poll " +req.body);
+	res.sendStatus(200);
+});
+
+app.route('/view_poll/:poll_string').get(function(req, res){
+	console.log("get view poll " +req.params.poll_string);
+	res.sendStatus(200);
+});
+
+
 app.route('/login').get(function(req, res){
   res.sendFile(process.cwd() + '/public/login.html');
+});
+
+app.route('/logout').get(function(req, res){
+	req.logout();
+	res.redirect('/');
+});
+
+app.route('/aalok/:poll_url').get(function(req, res){
+	console.log("app_url = "+req.params.poll_url);
+	var html;
+	var i = 0;
+	RequestHandler(req.params.poll_url, function(err, html){
+				if(err){
+					res.send("Not Found");
+				}
+				// console.log("html return "+html);
+				res.writeHead(200, {
+					'Content-Type': 'text/html',
+					'Content-Length': html.length,
+					'Expires': new Date().toUTCString()
+				});
+				res.end(html);
+		});
 });
 
 app.route('/create-poll').get(isLoggedIn, function(req, res){
@@ -54,11 +97,22 @@ app.route('/create-poll').get(isLoggedIn, function(req, res){
 });
 
 app.route('/publish-poll').get(isLoggedIn, function(req, res){
-	res.sendFile(process.cwd() + '/public/publish-poll.html');
+
+	console.log("inside publish-poll "+JSON.stringify(req.body));
+	console.log("inside publish-poll "+req);
+	// console.log("inside publish-poll "+req.body[0].poll_url);
 	console.log("poll has been published");
+	res.sendStatus(200);
 });
 
 app.route('/api/:id/auth').post(isLoggedIn, clickhandler.createPoll);
+// function(req, res){
+// 				//clickhandler.createPoll;
+// 				console.log("inside api/:id/auth "+req.body["aalok"]);
+// 				console.log("inside api/:id/auth "+JSON.stringify(req.body));
+// 				//console.log("inside api/:id/auth "+req.body["aalok"]);
+// 				console.log("inside api/:id/auth "+req["aalok"]);
+// });
 
 app.route('/auth/twitter').get(passport.authenticate('twitter'));
 

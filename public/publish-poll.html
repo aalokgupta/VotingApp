@@ -1,6 +1,27 @@
 <html>
 
-<body>
-  <h1> Your poll has been published <h2>
-</body>
-</html>
+  <head>
+      <link href="/public/css/main.css" rel="stylesheet" type="text/css">
+      <script type ="text/javascript" src = "controllers/RequestHandler.server.js"> </script>
+  </head>
+  <body>
+    <div class = "header">
+      <div class = "">
+        <h1> Your poll has been published <h2>
+        <div id = "url_publish_poll">
+        </div>
+      </div>
+    </div>
+
+    <div class = "container">
+      <div id = "id_poll_text"></div>
+      <ol id = "id_poll_option"></ol>
+      <input type = "button" class = "btn" id = "id_btn_submit_poll" value = "Submit"></input>
+    </div>
+    <div class = "footer">
+      <div class = "developerName">Aalok Gupta</div>
+    </div>
+    <script type ="text/javascript" src = "common/ajax-function.js"> </script>
+  </body>
+
+  </html>
