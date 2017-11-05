@@ -2,7 +2,10 @@
 
   <head>
       <link href="/public/css/main.css" rel="stylesheet" type="text/css">
-      <script type ="text/javascript" src = "controllers/RequestHandler.server.js"> </script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+      <!-- <script src="/controllers/Controller.viewpoll.server.js"></script> -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+
   </head>
   <body>
     <div class = "header">
@@ -13,15 +16,13 @@
       </div>
     </div>
 
-    <div class = "container">
-      <div id = "id_poll_text"></div>
-      <ol id = "id_poll_option"></ol>
-      <input type = "button" class = "btn" id = "id_btn_submit_poll" value = "Submit"></input>
+    <div class = "canvas">
+      <div id = "id_div_poll_chart"></div>
+      <canvas id="myChart" width="200" height="100"></canvas>
     </div>
     <div class = "footer">
       <div class = "developerName">Aalok Gupta</div>
     </div>
-    <script type ="text/javascript" src = "common/ajax-function.js"> </script>
-  </body>
+    </body>
 
   </html>

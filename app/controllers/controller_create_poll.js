@@ -3,6 +3,7 @@ var static_id = 3;
 
 (function(){
   var create_poll_btn = document.querySelector("#btn-create-poll") || null;
+  var username = document.querySelector("#id_user_name") || null;
   var poll_text = document.querySelector("#id-poll-text") || null;
   var add_option = document.querySelector("#add-option");
   var ol_option = document.querySelector("#ol-option");
@@ -14,7 +15,21 @@ var static_id = 3;
   var apiUrl = "http://127.0.0.1:8080" + '/api/:id/auth';
   var publish_poll_url = "http://127.0.0.1:8080" + '/publish-poll';
 
+  function displayUserName(data){
 
+    var obj = JSON.parse(data);
+    if(obj !== undefined){
+        username.innerHTML = obj["username"];
+    }
+    else{
+      username.innerHTML = "Guest";
+    }
+  }
+
+  $(function(){
+    var url = "http://127.0.0.1:8080/username";
+    ajaxFunctions.ajaxRequest("GET", url, {}, displayUserName);
+  });
 
   function publishPoll(data){
     console.log("server responded "+data);
@@ -88,10 +103,6 @@ var static_id = 3;
           console.log(JSON.stringify(json_obj));
           ajaxFunctions.ajaxRequest('POST', apiUrl, json_obj, publishPoll);
         }
-        // , function () {
-        //    ajaxFunctions.ajaxRequest('GET', apiUrl, updateClickCount)
-        // });
-        //
      }, false);
 
   add_option.addEventListener('click', function(){

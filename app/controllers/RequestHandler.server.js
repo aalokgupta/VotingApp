@@ -1,14 +1,16 @@
 'use strict';
+
 var Poll = require('../model/poll.js');
 
 function RequestHandler(poll_string, callback){
 
   console.log("req query = "+poll_string);
 
-  Poll.findOne({'poll_string': poll_string +'?'}, {_id: false})
+  Poll.findOne({'poll_string': poll_string}, {_id: false})
       .exec(function(err, document) {
         if(err){
-          throw err;
+          var html = '<html><body><h2>Requested Poll not found</h2></body></html>'
+          return callback(null, html);
         }
   if(document){
     console.log("document fetched from db "+document);
@@ -19,7 +21,8 @@ function RequestHandler(poll_string, callback){
     return callback(null, html);
   }
   else {
-    return callback("Requested query Not found", null);
+    var html = '<html><body><h2>Requested Poll not found</h2></body></html>';
+    return callback(null, html);
   }
 });
 };
@@ -33,6 +36,8 @@ function build_script(document){
                       'xmlhttp.onreadystatechange=function(){' +
                         'if (xmlhttp.readyState == 4 && xmlhttp.status == 200){' +
                           'string=xmlhttp.responseText;' +
+                          'console.log("response from server "+string);' +
+                          //  '(window.location.replace("http://127.0.0.1:8080/public/publish-poll.html"));' +
                           '}' +
                         '};'+
                         'xmlhttp.send(JSON.stringify(data)); ' +
@@ -45,9 +50,10 @@ function build_script(document){
                             '});'
 
   var view_poll_script = '$("#id_btn_view_poll").click(function(){' +
-                            'var url = "http://127.0.0.1:8080/view_poll/' +  document.poll_string  + '";' +
+                            'var url = "http://127.0.0.1:8080/view_poll/' + document.poll_string  + '";' +
+                            'console.log("view btn url "+url);'+
                             'var json = {};' +
-                            'ajaxRequest("GET", url, json)' +
+                            'ajaxRequest("GET", encodeURI(url), json)' +
                           '});'
 
   var radio_btn_script  =  ' $("input[type=radio][name=options]").change(function() {' +
@@ -62,7 +68,6 @@ function build_script(document){
                     'var user_option = 1;' +
                      ajax_function +
                      submit_poll_script +
-                     view_poll_script +
                      radio_btn_script +
                   '});' +
                 '</script>'
@@ -106,8 +111,12 @@ function buildHtml(document){
         body = body + li;
       }
       body = body + '</ol>'+
-            '<input type = "button" class = "btn" id = "id_btn_submit_poll" value = "Submit"></input>' +
-            '<input type = "button" class = "btn" id = "id_btn_view_poll" value = "View Poll"></input>' +
+            '<div class = "div-view-poll">' +
+            '<input  type = "button" class = "btn" id = "id_btn_submit_poll" value = "Submit Poll"></input>' +
+             '</div>' +
+             '<form class = "div-view-poll" action =' + "http://127.0.0.1:8080/view_poll/" + encodeURI(document.poll_string)   + '>' +
+               '<input type = "submit" class = "btn" id = "id_btn_view_poll" value = "View Poll"></input>' +
+             '</form>' +
              '</div> </div>';
 
     var html_str =  '<!DOCTYPE html>'

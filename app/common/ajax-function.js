@@ -7,23 +7,26 @@ var ajaxFunctions = {
     }
 
     if(document.readyState === 'complete'){
+      console.log("document has been loaded inside readyState");
       return fn();
     }
-
     document.addEventListener('DOMContentLoaded', fn, false);
-
   },
 
-  ajaxRequest: function ajaxRequest(method, url){//, callback){
+  ajaxRequest: function ajaxRequest(method, url, json_obj, callback){
     var xmlhttp = new XMLHttpRequest();
 
     xmlhttp.onreadystatechange = function () {
       if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-        console.log("ajax-function"+xmlhttp.response);
-        //  callback(xmlhttp.response);
+        console.log("11111111111 ajax-function " +xmlhttp.response);
+          callback(xmlhttp.response);
       }
    };
+
    xmlhttp.open(method, url, true);
-   xmlhttp.send();
+   xmlhttp.setRequestHeader("Content-Type", "application/json");
+   console.log("ajax function" + JSON.stringify(json_obj));
+	 xmlhttp.send(JSON.stringify(json_obj));
+  //  xmlhttp.send();
   }
 }

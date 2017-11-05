@@ -1,7 +1,17 @@
 'use strict';
 
 (function(){
-  var loginButton = document.querySelector('.btn-login') || null;
+  var loginButton = document.querySelector('#id_btn_login') || null;
+  var username = document.querySelector('#id_username') || null;
+
+  if(loginButton === null){
+    console.log("loginButton is null");
+  }
+  
+  if(username === null){
+    console.log("username is null");
+  }
+
   loginButton.addEventListener('click', function(){
     console.log("Login button click");
   });
