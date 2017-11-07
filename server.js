@@ -10,6 +10,7 @@ var Url = require('url');
 var ClickHandler = require(process.cwd() + '/app/controllers/clickHandler.server.js');
 var RequestHandler = require(process.cwd() + '/app/controllers/RequestHandler.server.js');
 var viewPollHandler = require(process.cwd() + '/app/controllers/Controller.viewpoll.server.js');
+var viewProfile = require(process.cwd() + '/app/controllers/Controller.server.viewProfile.js');
 
 var clickhandler = new ClickHandler();
 
@@ -79,10 +80,32 @@ app.route('/view_poll/:poll_string').get(function(req, res){
 
 });
 
-
-app.route('/login').get(function(req, res){
-  res.sendFile(process.cwd() + '/public/login.html');
+app.route('/profile').get(function(req, res){
+//req.user.twitter.id
+	viewProfile("3213442056", function(err, html){
+		//res.sendStatus(200);
+		if(err){
+			res.send("Not Found");
+		}
+		// console.log("html return "+html);
+		res.writeHead(200, {
+			'Content-Type': 'text/html',
+			'Content-Length': html.length,
+			'Expires': new Date().toUTCString()
+		});
+		res.end(html);
+	});
 });
+
+app.route('/delete_poll').post(clickhandler.deletePoll);
+// function(req, res){
+// 	console.log("poll deleted from db"+decodeURI(req.body.poll_string));
+//
+// 	res.sendStatus(200);
+// });
+// app.route('/login').get(function(req, res){
+//   res.sendFile(process.cwd() + '/public/login.html');
+// });
 
 app.route('/logout').get(function(req, res){
 	req.logout();

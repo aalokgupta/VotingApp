@@ -112,12 +112,11 @@ function buildHtml(document){
       }
       body = body + '</ol>'+
             '<div class = "div-view-poll">' +
-            '<input  type = "button" class = "btn" id = "id_btn_submit_poll" value = "Submit Poll"></input>' +
-             '</div>' +
              '<form class = "div-view-poll" action =' + "http://127.0.0.1:8080/view_poll/" + encodeURI(document.poll_string)   + '>' +
-               '<input type = "submit" class = "btn" id = "id_btn_view_poll" value = "View Poll"></input>' +
+             '<input  type = "submit" class = "btn" id = "id_btn_submit_poll" value = "Submit Poll"></input>' +
+             '<input type = "submit" class = "btn" id = "id_btn_view_poll" value = "View Poll"></input>' +
              '</form>' +
-             '</div> </div>';
+             '</div>';
 
     var html_str =  '<!DOCTYPE html>'
        + '<html> <head>'

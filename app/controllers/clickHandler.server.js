@@ -60,7 +60,18 @@ function clickHandler(){
   };
 
   this.deletePoll = function(req, res){
-
+    var poll_string = decodeURI(req.body.poll_string);
+    console.log("delete poll_string "+poll_string);
+    Poll.remove({poll_string: poll_string}, function(err, res){
+        if(err){
+        }
+        console.log(poll_string + " has been removed from Poll db");
+        UserPoll.remove({poll_string: poll_string}, function(err, res){
+          if(err){
+          }
+          console.log(poll_string+" has been removed from UserPoll");
+        });
+    });
   };
 
   this.viewPoll = function(req, res){

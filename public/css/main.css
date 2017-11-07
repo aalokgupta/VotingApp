@@ -125,3 +125,18 @@
   top: 50%;
   left: 30%;
 }
+.div_display_poll{
+  left: 50%;
+  padding-top: 5px;
+  border: 10px;
+  border-radius: 5px;
+  border-color: #ffab4d;
+}
+
+.label_poll_text{
+  font-size: 20px;
+  font-style: normal;
+  font-family: sans-serif;
+  font-stretch: normal;
+  height: 50px;
+}
