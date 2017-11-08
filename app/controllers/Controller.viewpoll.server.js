@@ -1,6 +1,7 @@
 'use strict';
 
 var UserPoll = require('../model/UserPoll.js');
+var Poll  = require('../model/poll.js');
 
 var viewPollHandler = function(poll_string, callback){
     console.log("inside viewPollHandler poll sting "+poll_string);
@@ -12,8 +13,15 @@ var viewPollHandler = function(poll_string, callback){
               }
               if(document){
                   console.log("Users poll has been fetched from db "+document);
-                  var html = build_html(document);
-                  callback(null, html);
+                  Poll.findOne({'poll_string':poll_string}, {_id: false})
+                  .exec(function(err, poll){
+                    if(err){
+                      var html = '<html><body><h2>Requested Poll not found</h2></body></html>';
+                      return callback(null, html);
+                    }
+                    var html = build_html(document, poll);
+                    callback(null, html);
+                  });
               }
               else{
                  var html = '<html><body><h2>Requested Poll not found</h2></body></html>';
@@ -22,7 +30,7 @@ var viewPollHandler = function(poll_string, callback){
             });
 };
 
-function chart_prepration(document){
+function chart_prepration(document, poll){
   var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
@@ -77,10 +85,10 @@ function prepare_html_body(document){
       return body;
 }
 
-function prepare_script(document){
+function prepare_script(document, poll){
 
     var vote_data = [document.No_of_vote1, document.No_of_vote2, document.No_of_vote3, document.No_of_vote4];
-    var vote_labels = ['"A"', '"B"', '"C"', '"D"'];
+    var vote_labels = ['"'+poll.poll_option1+'"', '"' + poll.poll_option2 +'"', '"' + poll.poll_option3 + '"', '"' + poll.poll_option4 + '"'];
     var script = '<script>' +
                   'var ctx = document.getElementById("myChart").getContext("2d");' +
                   'var myChart = new Chart(ctx, {' +
@@ -119,10 +127,10 @@ function prepare_script(document){
 return script;
 }
 
-function build_html(document){
+function build_html(document, poll){
 
   var body = prepare_html_body(document);
-  var script = prepare_script(document);
+  var script = prepare_script(document, poll);
 
   var html_script =   '<!DOCTYPE html>'
                     + '<html> <head>'

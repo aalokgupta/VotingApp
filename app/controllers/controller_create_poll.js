@@ -38,7 +38,7 @@ var static_id = 3;
       var body = document.querySelector('.create_poll_container') || null;
       while (body.firstChild) {
           body.removeChild(body.firstChild);
-        }
+      }
 
       if(body === null){
         console.log("div_server_generated_link is null");
@@ -127,5 +127,4 @@ var static_id = 3;
       alert("Max 4 options are allowd for a poll");
   }
   }, false);
-
 })();
