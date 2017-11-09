@@ -2,7 +2,7 @@
 
 var Poll = require('../model/poll.js');
 
-function viewProfile(twitter_id, callback){
+function viewProfile(twitter_id, twitter_user_name, callback){
       console.log("inside view Profile");
       Poll.find({"twitter_id": twitter_id}, {_id: false,   poll_option1: false,   poll_option2: false,
                 poll_option3: false,   poll_option4: false, __v: false})
@@ -10,8 +10,9 @@ function viewProfile(twitter_id, callback){
                   if(err){
                     throw err;
                   }
-                  if(result){
-                      var html = buildHtml(JSON.stringify(result), twitter_id);
+                  if(result.length){
+                    console.log("result = "+result);
+                      var html = buildHtml(JSON.stringify(result), twitter_id, twitter_user_name);
                       return callback(null, html);
                   }
                   else{
@@ -66,7 +67,7 @@ function getPollList(result, twitter_id){
   for(var i=1; i<=no_of_poll; i++){
     console.log('poll string for ['+i+"] = "+json[i-1].poll_string);
      var poll = "poll" + i;
-    li = li + '<li id =' + poll + 'class = "nostyle" style = "margin-top: 15px">' +
+    li = li + '<li id =' + poll + 'class = "nostyle" class = "li_view_poll" style = "margin-top: 15px">' +
             '<a style = "text-decoration: none" href =' + encodeURI("/"+ twitter_id + "/" + json[i-1].poll_string) + '>' +
             '<label  class = "label_poll_text" for = ' + poll + '>' + json[i-1].poll_string + '</label></a>' +
             '<input type = "button"  class = "btn btn-delete-poll"  value = "Delete" onclick = on_click_delete_poll(' + '"' + encodeURI(json[i-1].poll_string) + '"' + "," + i +')' + '>' +
@@ -75,21 +76,38 @@ function getPollList(result, twitter_id){
     return li;
 }
 
-function buildHtml(result, twitter_id){
+function buildHtml(result, twitter_id, twitter_user_name){
   var script = build_script(result);
+  var list_of_poll = '<div></div>';
   console.log("no of result = "+result.length);
-  var list_of_poll = getPollList(result, twitter_id);
-  var body =  '<div class = "header">' +
-            '<div class = "">' +
-            '<h1> Hello! <h2>' +
-            '<div id = "url_publish_poll">' +
-            '</div></div></div>' +
+  list_of_poll = getPollList(result, twitter_id);
+
+  // '<div class = "create-poll-header">' +
+  //         '<div class = "">' +
+  //         '<h1> Hello! <h2>' +
+  //         '<div id = "url_publish_poll">' +
+  //         '</div></div></div>' +
+  var body = '<body class = "display-poll-container">' +
+                '<div class = "create-poll-header">' +
+                  '<div class = "user-name">Welcome <span id = "id_user_name">' + twitter_user_name + '</span> </div>' +
+                      '<div style = "padding-top: 30px">' +
+                      '<a href = "/logout">' +
+                      '<button class = "btn user-logout">LogOut</button>' +
+                      '</a>' +
+                    '</div>' +
+                '</div>' +
+
             '<div class = "div-poll">' +
-            '<div id = "id_list_of_poll" class = "publish-poll-text"></div>' +
-            '<div class = "div_display_poll"> ' +
-            '<ol id = "ol">' +
-            list_of_poll +
-            '</ol> </div>';
+              '<div id = "id_list_of_poll" class = "publish-poll-text"></div>' +
+              '<div class = "div_display_poll"> ' +
+                '<ol id = "ol" class = "ol_view_poll">' +
+                  list_of_poll +
+                '</ol>' +
+              '</div>' +
+              '</div>'+
+            '<div class = "footer">' +
+              '<div class = "developerName">Developed by Aalok Gupta</div>' +
+            '</div>';
 
     var html_str =  '<!DOCTYPE html>'
        + '<html> <head>'

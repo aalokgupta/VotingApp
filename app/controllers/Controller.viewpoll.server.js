@@ -70,13 +70,23 @@ function chart_prepration(document, poll){
 }
 
 function prepare_html_body(document){
-
+  // '<div class = "header">' +
+  //   '<div class = "">' +
+  //     '<h1> Report for the Poll <h2>' +
+  //     '<div id = "url_publish_poll">' +
+  //   '</div></div></div>' +
   var body = '<body class = "display-poll-container">' +
-              '<div class = "header">' +
-             '<div class = "">' +
-             '<h1> Report for the Poll <h2>' +
-             '<div id = "url_publish_poll">' +
-             '</div></div></div>' +
+                '<div class = "create-poll-header">' +
+                  '<div class = "user-name">Welcome <span id = "id_user_name"> Aalok </span> </div>' +
+                  '<div style = "padding-top: 30px">' +
+                    '<a href = "/profile">' +
+                    '<button class = "btn user-profile">View Poll</button>' +
+                    '</a>' +
+                    '<a href = "/logout">' +
+                    '<button class = "btn user-logout">LogOut</button>' +
+                  '</a>' +
+                  '</div>' +
+                '</div>' +
              '<div class = "div-poll">' +
               '<div id = "id_poll_text" class = "publish-poll-text">' + document.poll_string + '</div>' +
               '<div class = "canvas"> '+

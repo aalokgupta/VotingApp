@@ -34,7 +34,7 @@ function build_script(document){
                       'xmlhttp.open(method, url, true);' +
                       'xmlhttp.setRequestHeader("Content-Type", "application/json");' +
                       'xmlhttp.onreadystatechange=function(){' +
-                        'if (xmlhttp.readyState == 4 && xmlhttp.status == 200){' +
+                        'if (xmlhttp.readyState === 4 && xmlhttp.status === 200){' +
                           'string=xmlhttp.responseText;' +
                           'console.log("response from server "+string);' +
                           //  '(window.location.replace("http://127.0.0.1:8080/public/publish-poll.html"));' +
@@ -76,15 +76,13 @@ function build_script(document){
 
 function buildHtml(document){
   var script = build_script(document);
-  var body =  '<div class = "header">' +
-            '<div class = "">' +
-            '<h1> Your poll has been published <h2>' +
-            '<div id = "url_publish_poll">' +
+  var body =  '<div class = "create-poll-header">' +
+                  '<div class = "">' +
+                  '<h1 style = "text-align:center"> Your poll has been created and publish for all user <h2>' +
+                  '<div id = "url_publish_poll">' +
             '</div></div></div>' +
             '<div class = "div-poll">' +
               '<div id = "id_poll_text" class = "publish-poll-text">' + document.poll_string + '</div>' +
-            '<div> ' +
-
             '<ol id = "id_poll_option">' +
               '<li class = "nostyle publish-poll-text">' +
                 '<input type = "radio" class = "radio-btn" id = "option1" value = "option1" name = "options"/>' +
@@ -112,11 +110,14 @@ function buildHtml(document){
       }
       body = body + '</ol>'+
             '<div class = "div-view-poll">' +
-             '<form class = "div-view-poll" action =' + "http://127.0.0.1:8080/view_poll/" + encodeURI(document.poll_string)   + '>' +
-             '<input  type = "submit" class = "btn" id = "id_btn_submit_poll" value = "Submit Poll"></input>' +
-             '<input type = "submit" class = "btn" id = "id_btn_view_poll" value = "View Poll"></input>' +
-             '</form>' +
-             '</div>';
+                '<form class = "div-view-poll" action =' + "http://127.0.0.1:8080/view_poll/" + encodeURI(document.poll_string)   + '>' +
+                  '<input  type = "submit" class = "btn" id = "id_btn_submit_poll" value = "Submit Poll"></input>' +
+                  '<input type = "submit" class = "btn" id = "id_btn_view_poll" value = "View Poll"></input>' +
+                '</form>' +
+            '</div></div>' +
+            '<div class = "footer">' +
+              '<div class = "developerName">Developed by Aalok Gupta</div>' +
+            '</div>';
 
     var html_str =  '<!DOCTYPE html>'
        + '<html> <head>'

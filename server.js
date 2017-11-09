@@ -80,9 +80,9 @@ app.route('/view_poll/:poll_string').get(function(req, res){
 
 });
 
-app.route('/profile').get(function(req, res){
+app.route('/profile').get(isLoggedIn, function(req, res){
 //req.user.twitter.id
-	viewProfile("3213442056", function(err, html){
+	viewProfile("3213442056", req.user.twitter.displayName, function(err, html){
 		//res.sendStatus(200);
 		if(err){
 			res.send("Not Found");

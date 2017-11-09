@@ -16,17 +16,17 @@
   height: 200px;
   line-height: 200px;
   text-align: right;
+  width: 100%;
 }
 .votingApp{
   font-size: 100px;
   font-weight: normal;
 }
 .developerName{
-  font-size: 50px;
+  font-size: 30px;
   font-stretch: expanded;
   text-align: right;
   margin-right: 20px;
-  line-height: 200px;
 }
 .btn{
   width: 150px;
@@ -47,7 +47,7 @@
 
 .create-poll-header{
   background-color: #2777b5;
-  height: 200px;
+  height: 150px;
   text-align: right;
   padding-top: 50px;
   padding-right: 50px;
@@ -59,15 +59,22 @@
 }
 .create_poll_container{
   background-color: #02f7ba;
-  height: 500px;
+  height: 480px;
   float: left;
-  width:100%;
+  width: 100%;
   padding-top: 20px;
-  padding-left: 20px;
+}
+.create_poll_footer{
+  background-color: #2777b5;
+  height: 200px;
+  width: 100%;
+  float: right;
+  text-align: 100px;
 }
 .div-poll{
   padding-top: 50px;
   padding-left: 50px;
+  min-height: 400px;
 }
 .poll-text{
   height: 50px;
@@ -82,12 +89,7 @@
 .display-poll-container{
   background-color: #02f7ba;
   height: 500px;
-  float: left;
   width:100%;
-  padding-top: 20px;
-  padding-left: 20px;
-  top: 50%;
-  left: 50%;
 }
 .publish-poll-text{
   font-size: 40px;
@@ -132,13 +134,19 @@
   border-radius: 5px;
   border-color: #ff0000;
   border-width: 10px;
+  min-height:500px;
 }
-li{
+.ol_view_poll{
+  position: absolute;
+  float: center;
+  width: 60%;
+}
+.li_view_poll{
   border: 1px solid black;;
   border-width: 1px;
   width: 1000px;
   height: 60px;
-  text-align: center;
+  text-align: left;
 }
 
 .label_poll_text{
@@ -148,7 +156,10 @@ li{
   font-stretch: normal;
   min-width: 400px;
   display: inline-block;
+  padding-left: 10px;
+  padding-top: 10px;
 }
 .btn-delete-poll{
   margin-top: 5px;
+  float: right;
 }
