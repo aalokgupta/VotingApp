@@ -61,6 +61,12 @@ function build_script(document){
                                 'else if(this.value === "option2") user_option = 2;' +
                                 'else if(this.value === "option3") user_option = 3;' +
                                 'else if(this.value === "option4") user_option = 4;' +
+                                'else if(this.value === "option5") user_option = 5;' +
+                                'else if(this.value === "option6") user_option = 6;' +
+                                'else if(this.value === "option7") user_option = 7;' +
+                                'else if(this.value === "option8") user_option = 8;' +
+                                'else if(this.value === "option9") user_option = 9;' +
+                                'else if(this.value === "option10") user_option = 10;' +
                             '});'
 
   var script = '<script>' +
@@ -83,31 +89,38 @@ function buildHtml(document){
             '</div></div></div>' +
             '<div class = "div-poll">' +
               '<div id = "id_poll_text" class = "publish-poll-text">' + document.poll_string + '</div>' +
-            '<ol id = "id_poll_option">' +
-              '<li class = "nostyle publish-poll-text">' +
-                '<input type = "radio" class = "radio-btn" id = "option1" value = "option1" name = "options"/>' +
-                '<label for = "option1">'  +  document.poll_option1 + '</label>' +
-              '</li>' +
-              '<li class = "nostyle publish-poll-text">' +
-                '<input type = "radio" class = "radio-btn" id = "option2" value = "option2" name = "options"/>' +
-                '<label for = "option2">'  +  document.poll_option2 + '</label>' +
-              '</li>';
-      if(document.poll_option3 !== undefined)
-      {
-        var li = '<li class = "nostyle publish-poll-text">' +
-                    '<input type = "radio" class = "radio-btn" id = "option3" value = "option3" name = "options"/>' +
-                    '<label for = "option3">'  +  document.poll_option3 + '</label>' +
-                  '</li>';
-        body = body + li;
-      }
-      if(document.poll_option4 !== undefined)
-      {
-        var li = '<li class = "nostyle publish-poll-text">' +
-                    '<input type = "radio" class = "radio-btn" id = "option4" value = "option4" name = "options"/>' +
-                    '<label for = "option4">'  +  document.poll_option4 + '</label>' +
-                  '</li>';
-        body = body + li;
-      }
+            '<ol id = "id_poll_option">';
+    var no_of_option = document.poll_option.length;
+    for(var i = 1; i <= no_of_option; i++){
+     body = body + '<li class = "nostyle publish-poll-text">' +
+        '<input type = "radio" class = "radio-btn" id = "option" value =' + "option" + i + ' name = "options"/>' +
+        '<label for = "option1">'  +  document.poll_option[i-1]["poll_option" + i] + '</label>' +
+       '</li>';
+    }
+      //         '<li class = "nostyle publish-poll-text">' +
+      //           '<input type = "radio" class = "radio-btn" id = "option1" value = "option1" name = "options"/>' +
+      //           '<label for = "option1">'  +  document.poll_option1 + '</label>' +
+      //         '</li>' +
+      //         '<li class = "nostyle publish-poll-text">' +
+      //           '<input type = "radio" class = "radio-btn" id = "option2" value = "option2" name = "options"/>' +
+      //           '<label for = "option2">'  +  document.poll_option2 + '</label>' +
+      //         '</li>';
+      // if(document.poll_option3 !== undefined)
+      // {
+      //   var li = '<li class = "nostyle publish-poll-text">' +
+      //               '<input type = "radio" class = "radio-btn" id = "option3" value = "option3" name = "options"/>' +
+      //               '<label for = "option3">'  +  document.poll_option3 + '</label>' +
+      //             '</li>';
+      //   body = body + li;
+      // }
+      // if(document.poll_option4 !== undefined)
+      // {
+      //   var li = '<li class = "nostyle publish-poll-text">' +
+      //               '<input type = "radio" class = "radio-btn" id = "option4" value = "option4" name = "options"/>' +
+      //               '<label for = "option4">'  +  document.poll_option4 + '</label>' +
+      //             '</li>';
+      //   body = body + li;
+      // }
       body = body + '</ol>'+
             '<div class = "div-view-poll">' +
                 '<form class = "div-view-poll" action =' + "http://127.0.0.1:8080/view_poll/" + encodeURI(document.poll_string)   + '>' +

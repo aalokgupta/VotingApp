@@ -5,21 +5,21 @@ var Poll  = require('../model/poll.js');
 
 var viewPollHandler = function(poll_string, callback){
     console.log("inside viewPollHandler poll sting "+poll_string);
-    UserPoll.findOne({'poll_string': poll_string}, {id: false})
-            .exec(function(err, document){
+    UserPoll.findOne({poll_string: poll_string}, {_id: false}, function(err, userpoll){
               if(err){
                 var html = '<html><body><h2>Requested Poll not found</h2></body></html>';
                 return callback(null, html);
               }
-              if(document){
-                  console.log("Users poll has been fetched from db "+document);
+              if(userpoll){
+                  console.log("Users poll has been fetched from db "+userpoll);
+
                   Poll.findOne({'poll_string':poll_string}, {_id: false})
                   .exec(function(err, poll){
                     if(err){
                       var html = '<html><body><h2>Requested Poll not found</h2></body></html>';
                       return callback(null, html);
                     }
-                    var html = build_html(document, poll);
+                    var html = build_html(userpoll, poll);
                     callback(null, html);
                   });
               }
@@ -30,51 +30,9 @@ var viewPollHandler = function(poll_string, callback){
             });
 };
 
-function chart_prepration(document, poll){
-  var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-        datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255,99,132,1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
-            }]
-        }
-    }
-  });
-}
 
 function prepare_html_body(document){
-  // '<div class = "header">' +
-  //   '<div class = "">' +
-  //     '<h1> Report for the Poll <h2>' +
-  //     '<div id = "url_publish_poll">' +
-  //   '</div></div></div>' +
+
   var body = '<body class = "display-poll-container">' +
                 '<div class = "create-poll-header">' +
                   '<div class = "user-name">Welcome <span id = "id_user_name"> Aalok </span> </div>' +
@@ -95,10 +53,26 @@ function prepare_html_body(document){
       return body;
 }
 
-function prepare_script(document, poll){
+function prepare_script(userpoll, poll){
 
-    var vote_data = [document.No_of_vote1, document.No_of_vote2, document.No_of_vote3, document.No_of_vote4];
-    var vote_labels = ['"'+poll.poll_option1+'"', '"' + poll.poll_option2 +'"', '"' + poll.poll_option3 + '"', '"' + poll.poll_option4 + '"'];
+    var no_of_option = poll.poll_option.length;
+    var vote_data = [];
+    var vote_labels = [];
+    var backgroundColor = [];
+    var borderColor = [];
+
+    for(var i=1; i <= no_of_option; i++){
+
+      var vote_option = "No_of_vote" + i;
+      var json = [];
+      json = (JSON.stringify(userpoll)).split(",");
+      var no_of_vote = json[i].split(':')[1];
+      console.log("No of votes for "+i +" = "+userpoll.No_of_vote1);
+      vote_data.push(no_of_vote);
+      vote_labels.push('"' + poll.poll_option[i-1]["poll_option"+i] + '"');
+      //backgroundColor.push(rgba())
+
+    }
     var script = '<script>' +
                   'var ctx = document.getElementById("myChart").getContext("2d");' +
                   'var myChart = new Chart(ctx, {' +

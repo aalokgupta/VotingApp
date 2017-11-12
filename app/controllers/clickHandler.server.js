@@ -1,6 +1,7 @@
 'use strict';
 var Poll = require('../model/poll.js');
 var UserPoll = require('../model/UserPoll.js');
+var mongoclient = require('mongodb').MongoClient;
 
 function clickHandler(){
   this.createPoll = function(req, res){
@@ -15,24 +16,43 @@ function clickHandler(){
     console.log("no of json element = "+Object.keys(req.body).length);
 
     var newPoll = new Poll();
-    var userPoll = new UserPoll();
+
 
     newPoll.poll_string =  req.body[0].poll_string;
-    newPoll.poll_option1 = req.body[1].poll_option1;
-    newPoll.poll_option2 = req.body[2].poll_option2;
 
+    var json = {};
+    for(var i=1; i<no_of_json_str; i++){
+      console.log("poll option i = "+req.body[i]["poll_option" + i]);
+      // newPoll["poll_option" + i] = req.body[i]["poll_option" + i];
+      // console.log("poll option i = "+newPoll["poll_option" + i]);
+      var option = {["poll_option" + i]: req.body[i]["poll_option" + i]};
+      newPoll.poll_option.push(option);
+      var vote = {["No_of_vote" + i]: 0};
+      json["No_of_vote" + i] = 0;
+    }
+    var userPoll = new UserPoll(json);
     userPoll.poll_string = req.body[0].poll_string;
-    userPoll.no_of_vote1 = 0;
-    userPoll.No_of_vote2 = 0;
 
-    if(no_of_json_str >= 4){
-      newPoll.poll_option3 = req.body[3].poll_option3;
-      userPoll.No_of_vote3 = 0;
-    }
-    if(no_of_json_str >= 5){
-      newPoll.poll_option4 = req.body[4].poll_option4;
-      userPoll.No_of_vote4 = 0;
-    }
+    console.log("userPoll = "+userPoll);
+    console.log("newPoll = "+JSON.stringify(newPoll));
+    // newPoll.poll_option1 = req.body[1].poll_option1;
+    // newPoll.poll_option2 = req.body[2].poll_option2;
+    //
+    // userPoll.poll_string = req.body[0].poll_string;
+    // userPoll.no_of_vote1 = 0;
+    // userPoll.No_of_vote2 = 0;
+    //
+    // if(no_of_json_str >= 4){
+    //   newPoll.poll_option3 = req.body[3].poll_option3;
+    //   userPoll.No_of_vote3 = 0;
+
+
+
+    // }
+    // if(no_of_json_str >= 5){
+    //   newPoll.poll_option4 = req.body[4].poll_option4;
+    //   userPoll.No_of_vote4 = 0;
+    // }
     newPoll.twitter_id  = req.user.twitter.id;
     console.log("newPole Obj "+newPoll.poll_string + "  "+newPoll.poll_option1+"   "+newPoll.twitter_id);
     newPoll.save(function(err){
@@ -83,23 +103,68 @@ function clickHandler(){
     console.log("inside user Poll "+req.body.option);
     var option = req.body.option;
     var update;
-    if(option === 1)
-      update = {'No_of_vote1': 1};
-    else if(option === 2)
-      update = {'No_of_vote2': 1};
-    else if(option === 3)
-      update = {'No_of_vote3': 1};
-    else if(option === 4)
-      update = {'No_of_vote4': 1};
+    // var key = UserPoll.votes["No_of_vote" + option];
+    console.log("key = "+option);
 
-    UserPoll.findOneAndUpdate({'poll_string': req.body.poll_string}, {$inc: update})
-            .exec(function(err, result){
-                if(err){
-                  throw err;
-                }
-                console.log("UserPoll updated "+result);
-                // res.send();
-            });
+    // else if(option === 2)
+    //   update = {'No_of_vote2': 1};
+    // else if(option === 3)
+    //   update = {'No_of_vote3': 1};
+    // else if(option === 4)
+    //   update = {'No_of_vote4': 1};
+    // UserPoll.findOne({'poll_string': req.body.poll_string}).then(userpoll => {
+    //   let votes = userpoll.votes[option-1];
+    //   console.log("inside query "+votes);
+    //   var curr_no_of_vote = votes["No_of_vote"+option];
+    //   console.log("No of votes "+votes["No_of_vote"+option]);
+    //   votes.No_of_vote1 = curr_no_of_vote + 1;
+    //
+    //   console.log("No of votes "+votes["No_of_vote"+option]);
+    //   return userpoll.save();
+    // });
+
+
+
+    var option_no = "No_of_vote" + option;
+    // req.body.poll_string}
+    update = {["No_of_vote" + option]: 1};
+    console.log("vote = "+JSON.stringify(update));
+    mongoclient.connect('mongodb://localhost:27017/votingapp', function(err, db){
+      var col = db.collection("userpolls");
+      if(err){
+        return err;
+      }
+      else{
+          col.findOne({poll_string: req.body.poll_string}, function(err, result){
+              if(err){
+
+              }
+              console.log("find result  "+JSON.stringify(result));
+          });
+        col.findOneAndUpdate({poll_string: req.body.poll_string},
+                             {$inc: {["No_of_vote" + option]: 1}},
+                             function(err, doc){
+                                if(err){
+                                  console.log("error on updating document "+err);
+                                }
+                                else{
+                                  console.log("document updated = "+doc);
+                                }
+                             });
+          // console.log("poll_string = "+req.body.poll_string);
+          //             col.findAndModify({
+          //                 query: {poll_string: "favourite dish?"},
+          //                 update: {$inc: {No_of_vote1: 1} },
+          //                 new: true},
+          //                 function(err, result){
+          //                   if(err){
+          //
+          //                   }
+          //                   console.log("find and modified = "+result);
+          //                 });
+          //                 db.close();
+      }
+    });
   };
 }
 module.exports = clickHandler;

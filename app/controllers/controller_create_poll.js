@@ -55,7 +55,8 @@ var static_id = 3;
       }
   }
 
-  function prepare_poll_josn(){
+  function prepare_poll_josn(no_of_list_item){
+
     if(poll_text.value === ""){
       alert("please provide poll string");
       return false;
@@ -63,50 +64,69 @@ var static_id = 3;
     else{
       json_obj.push({"poll_string" : poll_text.value});
     }
-
-   if(poll_option1.value === ""){
-      alert("please provide option1 string");
-      return false;
-    }
-    else{
-        json_obj.push({"poll_option1": poll_option1.value});
-    }
-
-    if(poll_option2.value === ""){
-      alert("please provide option2 string");
-      return false;
-    }
-    else{
-      json_obj.push({"poll_option2": poll_option2.value});
+    var json = {};
+    for(var i = 1; i <= no_of_list_item; i++){
+      var poll_id = "li #id-poll-option" + i;
+      console.log("poll id = "+poll_id);
+      var poll_options = $(poll_id).val() || null;
+      if(poll_options === ""){
+         alert("please provide string for the option"+i);
+         return false;
+      }
+      else{
+          json = {["poll_option" + i]: poll_options};
+          json_obj.push(json);
+       }
     }
 
-    if(static_id > 3 && poll_option3.value === ""){
-      alert("please provide option3 string");
-      return false;
-    }
-    else if(static_id > 3){
-      json_obj.push({"poll_option3": poll_option3.value});
-    }
+    console.log("poll string are "+ JSON.stringify(json_obj));
 
-    if(static_id > 4 && poll_option4.value === ""){
-      alert("please provide option4 string");
-      return false;
-    }
-    else if(static_id > 4){
-      json_obj.push({"poll_option4": poll_option4.value});
-    }
-    return true;
+  //  if(poll_option1.value === ""){
+  //     alert("please provide option1 string");
+  //     return false;
+  //  }
+  //  else{
+  //     json_obj.push({"poll_option1": poll_option1.value});
+  //   }
+   //
+  //   if(poll_option2.value === ""){
+  //     alert("please provide option2 string");
+  //     return false;
+  //   }
+  //   else{
+  //     json_obj.push({"poll_option2": poll_option2.value});
+  //   }
+   //
+  //   if(static_id > 3 && poll_option3.value === ""){
+  //     alert("please provide option3 string");
+  //     return false;
+  //   }
+  //   else if(static_id > 3){
+  //     json_obj.push({"poll_option3": poll_option3.value});
+  //   }
+   //
+  //   if(static_id > 4 && poll_option4.value === ""){
+  //     alert("please provide option4 string");
+  //     return false;
+  //   }
+  //   else if(static_id > 4){
+  //     json_obj.push({"poll_option4": poll_option4.value});
+  //   }
+     return true;
   }
 
   create_poll_btn.addEventListener('click', function () {
-        if(true === prepare_poll_josn()){
+    var no_of_list_item = $("#ol-option li").length;
+    console.log("No of option available are "+no_of_list_item);
+
+        if(true === prepare_poll_josn(no_of_list_item)){
           console.log(JSON.stringify(json_obj));
           ajaxFunctions.ajaxRequest('POST', apiUrl, json_obj, publishPoll);
         }
      }, false);
 
   add_option.addEventListener('click', function(){
-    if(static_id < 5){
+    // if(static_id < 5){
       var li = document.createElement("li");
       var input = document.createElement("input");
       input.type = "text";
@@ -115,16 +135,16 @@ var static_id = 3;
       li.appendChild(input);
       ol_option.appendChild(li);
       static_id++;
-      console.log("id = "+static_id);
-      if(static_id === 4){
-         poll_option3 = document.querySelector("#id-poll-option3") || null;
-      }
-      if(static_id === 5){
-        poll_option4 = document.querySelector("#id-poll-option4") || null;
-      }
-    }
-    else{
-      alert("Max 4 options are allowd for a poll");
-  }
+      // console.log("id = "+static_id);
+      // if(static_id === 4){
+      //    poll_option3 = document.querySelector("#id-poll-option3") || null;
+      // }
+      // if(static_id === 5){
+      //   poll_option4 = document.querySelector("#id-poll-option4") || null;
+      // }
+  //   }
+  //   else{
+  //     alert("Max 4 options are allowd for a poll");
+  // }
   }, false);
 })();

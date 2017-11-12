@@ -91,9 +91,13 @@ function buildHtml(result, twitter_id, twitter_user_name){
                 '<div class = "create-poll-header">' +
                   '<div class = "user-name">Welcome <span id = "id_user_name">' + twitter_user_name + '</span> </div>' +
                       '<div style = "padding-top: 30px">' +
+                      '<a href = "/create-poll">' +
+                      '<button class = "btn">Create Poll</button>' +
+                      '</a>' +
                       '<a href = "/logout">' +
                       '<button class = "btn user-logout">LogOut</button>' +
                       '</a>' +
+
                     '</div>' +
                 '</div>' +
 
